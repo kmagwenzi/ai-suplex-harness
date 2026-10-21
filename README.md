@@ -9,12 +9,11 @@ The **MCP server** that turns the AI-Suplex vault into a window any MCP client
 ## Run
 
 ```bash
-node Tools/mcp/server.js             # stdio server (JSON-RPC 2.0, newline-delimited)
-node Tools/mcp/server.js --contract  # the frozen surface (JSON) — what contract.test.js compares
+node server.js             # stdio server (JSON-RPC 2.0, newline-delimited)
+node server.js --contract  # the frozen surface (JSON) — what contract.test.js compares
 ```
 
-The server resolves the vault from its own path (`Tools/mcp/../..`), or from
-`AISUPLEX_VAULT` when set. **No `cwd` assumption.**
+The server resolves the vault from `AISUPLEX_VAULT`, then by walking up to `period.md`, then the co-located path. **No `cwd` assumption.**
 
 ## What it exposes
 
