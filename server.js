@@ -15,7 +15,21 @@
  */
 
 const readline = require("readline");
-const { CONTRACT } = require("./lib/vault");
+
+// Loading the contract resolves the vault. When that fails, print the
+// actionable message without a stack — a stack here names vault.js, not the
+// real problem (the checkout is not linked yet).
+let CONTRACT;
+try {
+  ({ CONTRACT } = require("./lib/vault"));
+} catch (e) {
+  if (e.code === "AISUPLEX_VAULT_UNLINKED" || e.code === "AISUPLEX_CONTRACT_INVALID") {
+    process.stderr.write(e.message + "\n");
+    process.exit(1);
+  }
+  throw e;
+}
+
 const resources = require("./resources");
 const tools = require("./tools");
 const prompts = require("./prompts");

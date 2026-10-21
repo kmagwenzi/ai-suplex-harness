@@ -8,7 +8,9 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "start": "node server.js",
-    "contract": "node server.js --contract"
+    "contract": "node server.js --contract",
+    "link": "node link.js",
+    "vault": "node link.js --show"
   },
   "license": "MIT"
 }

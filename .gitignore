@@ -1,0 +1,4 @@
+# Machine-local vault link (see link.js). Each checkout links its own vault.
+vault.json
+
+node_modules/

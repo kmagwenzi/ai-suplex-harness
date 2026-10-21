@@ -13,7 +13,24 @@ node server.js             # stdio server (JSON-RPC 2.0, newline-delimited)
 node server.js --contract  # the frozen surface (JSON) — what contract.test.js compares
 ```
 
-The server resolves the vault from `AISUPLEX_VAULT`, then by walking up to `period.md`, then the co-located path. **No `cwd` assumption.**
+The server resolves the vault from `AISUPLEX_VAULT`, then `vault.json` (the
+repo-local link), then by walking up to `period.md`, then the co-located path.
+**No `cwd` assumption.**
+
+## Link a vault
+
+An extracted checkout has no vault beside it. Link it once:
+
+```bash
+node link.js /path/to/AI-Suplex-777   # writes vault.json (gitignored)
+node link.js --show                   # vault path + which rule resolved it
+node link.js --clear                  # remove the link
+```
+
+`AISUPLEX_VAULT` still overrides the link, so CI and one-off runs stay
+stateless. An unlinked checkout fails with `AISUPLEX_VAULT_UNLINKED` and the
+link command, instead of an `ENOENT` on the wrong `contract.json`.
+
 
 ## What it exposes
 
@@ -40,6 +57,7 @@ The server resolves the vault from `AISUPLEX_VAULT`, then by walking up to `peri
 | `prompts.js` | the 7 prompts → `Prompt Patterns/` |
 | `lib/cli.js` | one tool = one CLI invocation |
 | `lib/vault.js` | vault root · contract load · cycle/week · containment |
+| `link.js` | bind this checkout to a vault (`vault.json`) |
 | `aionui/` | the **`ai-suplex-ui`** seed (moves to its own repo) |
 
 ## Repo extraction (→ `ai-suplex-harness` + `ai-suplex-ui`)
@@ -51,6 +69,7 @@ ai-suplex-harness/          ai-suplex-ui/
 ├── tools.js                ├── assistant.md
 ├── prompts.js              └── README.md
 ├── lib/{cli,vault}.js
+├── link.js
 ├── README.md
 ├── CONTRACT.md
 └── package.json
