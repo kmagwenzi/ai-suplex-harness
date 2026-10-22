@@ -4,13 +4,18 @@
   "private": true,
   "description": "AI-Suplex MCP server (mcp v1) — the harness window over the vault. Dependency-free; shells out to the framework CLI.",
   "type": "commonjs",
-  "bin": { "suplex-mcp": "server.js" },
-  "engines": { "node": ">=20" },
+  "bin": {
+    "suplex-mcp": "server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node server.js",
     "contract": "node server.js --contract",
     "link": "node link.js",
-    "vault": "node link.js --show"
+    "vault": "node link.js --show",
+    "test": "node test/contract.test.js"
   },
   "license": "MIT"
 }
