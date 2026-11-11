@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * prompts.js — the 7 commands as MCP prompts (mcp v1).
+ * prompts.js — the 9 commands as MCP prompts (mcp v1).
  *
  * Each prompt surfaces the friendly one-liner (`AI-Suplex: <Command>`) and reads its
  * source of truth — a `⚡ Command — <Name>.md` doc where one exists, else the Pattern.
@@ -61,6 +61,20 @@ const PROMPTS = [
     description: "Promote an artifact to a B-Bomb",
     file: "Prompt Patterns/📄 Pattern - B-Bomb Promotion.md",
     arguments: [{ name: "artifact", required: false }],
+  },
+  {
+    name: "define-workspace",
+    command: "AI-Suplex: Define Workspace",
+    description: "Create a workspace brief — the client-facing word for a thread instance",
+    file: "Prompt Patterns/AI-Suplex Commands/⚡ Command — Define Workspace.md",
+    arguments: [{ name: "type", required: false }],
+  },
+  {
+    name: "kickstart-workspace",
+    command: "AI-Suplex: Kickstart Workspace",
+    description: "Load and run a defined workspace",
+    file: "Prompt Patterns/AI-Suplex Commands/⚡ Command — Kickstart Workspace.md",
+    arguments: [{ name: "type", required: false }, { name: "instance", required: false }],
   },
 ];
 

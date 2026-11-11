@@ -24,7 +24,7 @@ const SERVER = path.join(ROOT, "server.js");
 const FROZEN = {
   resources: ["context", "mission", "threads", "tasklists", "tasklist", "memory/index", "memory/lessons", "approvals"],
   tools: ["suplex_status", "suplex_tasklist_next", "suplex_capture", "suplex_save_context", "suplex_close", "suplex_index", "suplex_promote", "suplex_approve", "suplex_ritual"],
-  prompts: ["session-start", "session-end-report", "artifact-capture", "save-context", "tasklist-generation", "weekly-review", "b-bomb-promotion"],
+  prompts: ["session-start", "session-end-report", "artifact-capture", "save-context", "tasklist-generation", "weekly-review", "b-bomb-promotion", "define-workspace", "kickstart-workspace"],
 };
 
 /** The keys --contract publishes. The rest is internal wiring, deliberately omitted. */
