@@ -15,7 +15,7 @@
     "contract": "node server.js --contract",
     "link": "node link.js",
     "vault": "node link.js --show",
-    "test": "node test/contract.test.js"
+    "test": "node test/contract.test.js && node test/workspace-create.test.js"
   },
   "license": "MIT"
 }

@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * tools.js — the 9 action tools (mcp v1).
+ * tools.js — the 10 action tools (mcp v1).
  *
  * Every tool is ONE framework CLI invocation (cli.run) or a DECLARED file-write
  * (suplex_capture · suplex_save_context). No logic lives here that the framework
@@ -12,6 +12,7 @@ const fs = require("fs");
 const path = require("path");
 const { VAULT, read: readVault, detectCycleWeek, within } = require("./lib/vault");
 const cli = require("./lib/cli");
+const workspaceCreate = require("./workspace-create");
 // paths.js is framework-owned: load it from the vault (works co-located AND extracted).
 const P = require(path.join(VAULT, "Tools", "paths.js"));
 
@@ -91,6 +92,23 @@ const TOOLS = [
         note: { type: "string" },
       },
       required: ["item", "decision"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "suplex_workspace_create",
+    description: "Open a workspace — write its instance context file + tasklist (declared file-write; N lanes only)",
+    inputSchema: {
+      type: "object",
+      properties: {
+        thread: { type: "string", enum: ["project-tasks", "random-tasks"] },
+        slug: { type: "string" },
+        title: { type: "string" },
+        mission: { type: "string" },
+        focus: { type: "string" },
+        tasks: { type: "array", items: { type: "string" } },
+      },
+      required: ["thread", "slug", "title", "mission"],
       additionalProperties: false,
     },
   },
@@ -290,6 +308,19 @@ function call(name, args) {
     }
     case "suplex_approve":
       return approve(args);
+    case "suplex_workspace_create":
+      return workspaceCreate.create(args, {
+        fs,
+        path,
+        VAULT,
+        within,
+        detectCycleWeek,
+        cli,
+        pad,
+        slug,
+        yamlStr,
+        text,
+      });
     case "suplex_ritual": {
       if (args.approved !== true) throw new Error("suplex_ritual requires approved: true (the Hustler gate)");
       const argv = [args.which, "--tier", args.tier || "auto"];
