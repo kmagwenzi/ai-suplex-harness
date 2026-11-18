@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * resources.js — the 8 read-only views of the vault (mcp v1).
+ * resources.js — the read-only views of the vault (mcp v1): 8 + `suplex://commands` (mcp v1.3.0).
  * Every resource either reads a canonical file or runs a READ-ONLY CLI.
  * A resource read never writes, syncs, or opens an instance.
  */
@@ -19,6 +19,7 @@ const RESOURCES = [
   { uri: "suplex://memory/index", name: "Memory index", description: "Memory/index.md", mimeType: "text/markdown" },
   { uri: "suplex://memory/lessons", name: "Lessons", description: "Memory/lessons.md", mimeType: "text/markdown" },
   { uri: "suplex://approvals", name: "Approval inbox", description: "the Hustler-decides inbox", mimeType: "application/json" },
+  { uri: "suplex://commands", name: "AI-Suplex Commands", description: "every ⚡ Command doc — trigger + full body", mimeType: "application/json" },
 ];
 
 const TEMPLATES = [
@@ -53,6 +54,26 @@ function readResource(uri) {
       return { uri, mimeType: "text/markdown", text: readVault("Memory/index.md") || "" };
     case "suplex://memory/lessons":
       return { uri, mimeType: "text/markdown", text: readVault("Memory/lessons.md") || "" };
+    case "suplex://commands": {
+      // The 23 ⚡ Command docs as data: the guide renders the real bodies, so it
+      // can never drift from what the vault says a command does.
+      const dir = path.join(VAULT, "Prompt Patterns", "AI-Suplex Commands");
+      if (!within("Prompt Patterns/AI-Suplex Commands", dir)) {
+        throw new Error("commands path escapes Prompt Patterns/");
+      }
+      const docs = fs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith(".md"))
+        .sort()
+        .map((f) => {
+          const body = fs.readFileSync(path.join(dir, f), "utf8");
+          const declared = (body.match(/^command:\s*"?([^"\n]+)"?/m) || [])[1];
+          const fallback = f.replace(/\.md$/, "").replace(/^.*?—\s*/, "");
+          const trigger = String(declared || fallback).trim().replace(/^"+|"+$/g, "");
+          return { file: f, trigger, title: trigger, body };
+        });
+      return { uri, mimeType: "application/json", text: JSON.stringify(docs) };
+    }
     case "suplex://approvals": {
       const r = cli.run("approvals", ["--json"]);
       return { uri, mimeType: "application/json", text: r.ok ? r.stdout : JSON.stringify({ error: r.stderr || "approvals failed" }) };
